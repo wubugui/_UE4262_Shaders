@@ -1,7 +1,7 @@
-#include "Common.ush"
-#include "SceneTexturesCommon.ush"
-#include "SHCommon.ush"
-#include "AtmosphereCommon.ush"
+#include "../Common.ush"
+#include "../SceneTexturesCommon.ush"
+#include "../SHCommon.ush"
+#include "../AtmosphereCommon.ush"
 #include "SecondSkyCommon.ush"
 
 void VSMain(
@@ -25,5 +25,6 @@ void StylizedSkyPSMain(
 	float4 ScreenVector : TEXCOORD1,
 	out float4 OutColor : SV_Target0)
 {
-    OutColor = ComputeSkyColor(ScreenVector.y, ResolvedView.DirectionalLightDirection.y);
+    OutColor.xyz = ComputeSkyColor(ScreenVector.y, ResolvedView.DirectionalLightDirection.y);
+	OutColor.w = 1.0f;
 }

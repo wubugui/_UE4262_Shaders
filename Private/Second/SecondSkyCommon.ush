@@ -36,9 +36,9 @@ half3 ComputeSkyColor(half dotViewUp, half dotLightUp)
     maskHorizon = pow(maskHorizon, _SkyGradientTop3_HorizonLineExponent1.w);
     maskHorizon = saturate(maskHorizon);
     maskGradient = 1.0 - saturate(dotViewUp);
-    maskGradient = pow(maskGradient, _SkyGradientBottom3_SkyGradientExponent1.w);
+    maskGradient = pow(maskGradient, _SkyGradientBottomhalf3_SkyGradientExponent1.w);
     maskGradient = saturate(maskGradient);
-    half3 finalColor = lerp(_SkyGradientTop3_HorizonLineExponent1.rgb, _SkyGradientBottom3_SkyGradientExponent1.rgb, maskGradient);
+    half3 finalColor = lerp(_SkyGradientTop3_HorizonLineExponent1.rgb, _SkyGradientBottomhalf3_SkyGradientExponent1.rgb, maskGradient);
     half3 nightBtColor = lerp(_HorizonLineContribution1_SkyNightGradient3.gba, _NightBtColor_Padding1.rgb, maskGradient);
     finalColor = lerp(finalColor, nightBtColor, pow(saturate(-dotLightUp * _ToNightSpeed1_HorizonLineColor3.x), 1));
     half3 hcolor = lerp(_ToNightSpeed1_HorizonLineColor3.gba, _HorizonLineSunsetColor3_ToSunsetFalloff1.rgb, pow((1 - saturate(dotLightUp)), _HorizonLineSunsetColor3_ToSunsetFalloff1.w));
