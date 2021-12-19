@@ -1,0 +1,29 @@
+#include "Common.ush"
+#include "SceneTexturesCommon.ush"
+#include "SHCommon.ush"
+#include "AtmosphereCommon.ush"
+#include "SecondSkyCommon.ush"
+
+void VSMain(
+	in float2 InPosition : ATTRIBUTE0,
+	out float2 OutTexCoord : TEXCOORD0,
+	out float4 OutScreenVector : TEXCOORD1,
+	out float4 OutPosition : SV_POSITION
+	)
+{	
+	// screenspace position from vb
+	OutPosition = float4(InPosition,0,1);
+	// texture coord from vb
+	OutTexCoord = InPosition * View.ScreenPositionScaleBias.xy + View.ScreenPositionScaleBias.wz;
+
+	// deproject to world space
+	OutScreenVector = mul(float4(InPosition,1,0), View.ScreenToTranslatedWorld);
+}
+
+void StylizedSkyPSMain(
+	float2 TexCoord : TEXCOORD0,
+	float4 ScreenVector : TEXCOORD1,
+	out float4 OutColor : SV_Target0)
+{
+    OutColor = ComputeSkyColor(ScreenVector.y, ResolvedView.DirectionalLightDirection.y);
+}

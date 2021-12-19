@@ -1,0 +1,48 @@
+#pragma once
+
+half4 _HorizonLineSunsetColor3_ToSunsetFalloff1;
+half4 _ToNightSpeed1_HorizonLineColor3;
+half4 _HorizonLineContribution1_SkyNightGradient3;
+half4 _SkyGradientTop3_HorizonLineExponent1;
+half4 _SkyGradientBottomhalf3_SkyGradientExponent1;
+half4 _NightBtColor_Padding1;
+
+/*
+half3 ComputeSkyColor(half dotViewUp, half dotLightUp)
+{
+    half maskHorizon, maskGradient;
+    float horizonSoften = 1 - pow(1 - saturate(dotViewUp), 50);
+    maskHorizon = 1.0 - abs(dotViewUp);
+    maskHorizon = pow(maskHorizon, _HorizonLineExponent);
+    maskHorizon = saturate(maskHorizon);
+    maskGradient = 1.0 - saturate(dotViewUp);
+    maskGradient = pow(maskGradient, _SkyGradientExponent);
+    maskGradient = saturate(maskGradient);
+    half3 finalColor = lerp(_SkyGradientTop, _SkyGradientBottom, maskGradient);
+    half3 nightBtColor = lerp(_SkyNightGradient, _NightBtColor, maskGradient);
+    finalColor = lerp(finalColor, nightBtColor, pow(saturate(-dotLightUp * _ToNightSpeed), 1));
+    half3 hcolor = lerp(_HorizonLineColor, _HorizonLineSunsetColor, pow((1 - saturate(dotLightUp)), _ToSunsetFalloff));
+    hcolor = lerp(hcolor, nightBtColor, saturate(-dotLightUp * _ToNightSpeed));
+    finalColor = lerp(finalColor, hcolor, _HorizonLineContribution * maskHorizon);
+    return finalColor;
+}
+*/
+
+half3 ComputeSkyColor(half dotViewUp, half dotLightUp)
+{
+    half maskHorizon, maskGradient;
+    float horizonSoften = 1 - pow(1 - saturate(dotViewUp), 50);
+    maskHorizon = 1.0 - abs(dotViewUp);
+    maskHorizon = pow(maskHorizon, _SkyGradientTop3_HorizonLineExponent1.w);
+    maskHorizon = saturate(maskHorizon);
+    maskGradient = 1.0 - saturate(dotViewUp);
+    maskGradient = pow(maskGradient, _SkyGradientBottom3_SkyGradientExponent1.w);
+    maskGradient = saturate(maskGradient);
+    half3 finalColor = lerp(_SkyGradientTop3_HorizonLineExponent1.rgb, _SkyGradientBottom3_SkyGradientExponent1.rgb, maskGradient);
+    half3 nightBtColor = lerp(_HorizonLineContribution1_SkyNightGradient3.gba, _NightBtColor_Padding1.rgb, maskGradient);
+    finalColor = lerp(finalColor, nightBtColor, pow(saturate(-dotLightUp * _ToNightSpeed1_HorizonLineColor3.x), 1));
+    half3 hcolor = lerp(_ToNightSpeed1_HorizonLineColor3.gba, _HorizonLineSunsetColor3_ToSunsetFalloff1.rgb, pow((1 - saturate(dotLightUp)), _HorizonLineSunsetColor3_ToSunsetFalloff1.w));
+    hcolor = lerp(hcolor, nightBtColor, saturate(-dotLightUp * _ToNightSpeed1_HorizonLineColor3.x));
+    finalColor = lerp(finalColor, hcolor, _HorizonLineContribution1_SkyNightGradient3.x * maskHorizon);
+    return finalColor;
+}
